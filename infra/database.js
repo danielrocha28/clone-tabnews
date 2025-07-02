@@ -15,7 +15,7 @@ async function query(queryObject) {
 }
 
 async function getNewClient() {
-    const client = new Client({
+  const client = new Client({
     host: process.env.POSTGRES_HOST,
     port: process.env.POSTGRES_PORT,
     user: process.env.POSTGRES_USER,
@@ -24,10 +24,9 @@ async function getNewClient() {
     ssl: process.env.NODE_ENV === "production" ? true : false,
   });
 
-
-await client.connect(); 
-return client;
-};
+  await client.connect();
+  return client;
+}
 export default {
   query,
   getNewClient,
