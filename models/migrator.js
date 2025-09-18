@@ -3,30 +3,13 @@ import { resolve } from "node:path";
 import database from "infra/database.js";
 
 const defaultMigrationOptions = {
-  dryRun: true,
   dir: resolve("infra", "migrations"),
   direction: "up",
   verbose: true,
   migrationsTable: "pgmigrations",
 };
 
-async function listPendingMigrations() {
-  let dbClient;
-
-  try {
-    dbClient = await database.getNewClient();
-
-    const pendingMigrations = await migrationRunner({
-      ...defaultMigrationOptions,
-      dbClient,
-    });
-    return pendingMigrations;
-  } finally {
-    await dbClient?.end();
-  }
-}
-
-async function runPendingMigrations() {
+async function runMigrations({ dryRun }) {
   let dbClient;
 
   try {
@@ -34,8 +17,8 @@ async function runPendingMigrations() {
 
     const migratedMigrations = await migrationRunner({
       ...defaultMigrationOptions,
+      dryRun,
       dbClient,
-      dryRun: false,
     });
     return migratedMigrations;
   } finally {
@@ -44,8 +27,8 @@ async function runPendingMigrations() {
 }
 
 const migrator = {
-  listPendingMigrations,
-  runPendingMigrations,
+  listPendingMigrations: async () => runMigrations({ dryRun: true }),
+  runPendingMigrations: async () => runMigrations({ dryRun: false }),
 };
 
 export default migrator;
