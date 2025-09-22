@@ -1,10 +1,10 @@
-import orcherstrator from "tests/orchestrator";
+import orchestrator from "tests/orchestrator";
 import database from "infra/database";
 
 beforeAll(async () => {
-  await orcherstrator.waitForAllServices();
-  await orcherstrator.cleanDatabase();
-  await orcherstrator.runPendingMigrations();
+  await orchestrator.waitForAllServices();
+  await orchestrator.cleanDatabase();
+  await orchestrator.runPendingMigrations();
 });
 
 describe("POST /api/v1/users", () => {
