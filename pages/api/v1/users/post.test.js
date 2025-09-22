@@ -1,0 +1,27 @@
+import orcherstrator from "tests/orchestrator";
+import database from "infra/database";
+
+beforeAll(async () => {
+  await orcherstrator.waitForAllServices();
+  await orcherstrator.cleanDatabase();
+  await orcherstrator.runPendingMigrations();
+});
+
+describe("POST /api/v1/users", () => {
+  describe("Anonymous user", () => {
+    test("With unique and valid data", async () => {
+      await database.query({
+        text: "INSERT INTO users (username, email, password) VALUES ($1, $2, $3);",
+        values: ["felipetelo", "danielrocha.2805@gmail.com", "senha123"],
+      });
+
+      const users = await database.query("SELECT * FROM users;");
+      console.log(users.rows);
+
+      const response = await fetch("http://localhost:3000/api/v1/users", {
+        method: "POST",
+      });
+      expect(response.status).toBe(201);
+    });
+  });
+});
