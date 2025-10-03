@@ -1,8 +1,13 @@
 import retry from "async-retry";
-import database from "infra/database";
+import database from "infra/database.js";
+import migrator from "models/migrator.js";
 
 async function cleanDatabase() {
   await database.query("drop schema public cascade; create schema public;");
+}
+
+async function runPendingMigrations() {
+  await migrator.runPendingMigrations();
 }
 
 async function waitForAllServices() {
@@ -24,9 +29,10 @@ async function waitForAllServices() {
   }
 }
 
-const orcherstrator = {
+const orchestrator = {
   waitForAllServices,
   cleanDatabase,
+  runPendingMigrations,
 };
 
-export default orcherstrator;
+export default orchestrator;
