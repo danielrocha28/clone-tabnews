@@ -32,7 +32,7 @@ function checkPostgres() {
       return;
     }
 
-    console.log("\n🟢 Postgres is ready!");
+    ("\n🟢 Postgres is ready!");
   }
 }
 process.stdout.write(awaintMessage);
