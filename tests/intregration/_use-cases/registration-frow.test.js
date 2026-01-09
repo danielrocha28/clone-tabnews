@@ -38,7 +38,14 @@ describe("Use case: Registration Frow (all successful)", () => {
       updated_at: createUserResponseBody.updated_at,
     });
   });
-  test("Recieve activation email", async () => {});
+  test("Recieve activation email", async () => {
+    const lastEmail = await orchestrator.getLastEmail();
+
+    expect(lastEmail.sender).toBe("<contato@fintab.com.br>");
+    expect(lastEmail.recipients[0]).toBe("<registration.frow@curso.dev>");
+    expect(lastEmail.subject).toBe("Ative seu cadastro no Fintab");
+    expect(lastEmail.text).toContain("registrationFrow");
+  });
   test("Active account", async () => {});
   test("Login", async () => {});
   test("Get user information", async () => {});
